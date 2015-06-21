@@ -155,20 +155,20 @@ $(function() {
 <div class="container">
   <div class="page-select">
     <div class="clearfix"></div>
-    <form action="/camplus/carpool/select" method="get">
+    <form action="/camplus/gallery" method="get">
       <input type="submit" name="indexmove" value="head"/>
     </form>
-    <form action="/camplus/carpool/select" method="get">
+    <form action="/camplus/gallery" method="get">
       <input type="submit" name="indexmove" value="prev"/>
     </form>
-    <form action="/camplus/carpool/select" method="get">
-      <input type="text" name="indexmove" />
+    <form action="/camplus/gallery" method="get">
+      <input type="text" name="indexmove" value="${sessionScope.index+1}" />
       <input type="submit" value="Go"/>
     </form>
-    <form action="/camplus/carpool/select" method="get">
+    <form action="/camplus/gallery" method="get">
       <input type="submit" name="indexmove" value="next"/>
     </form>
-    <form action="/camplus/carpool/select" method="get">
+    <form action="/camplus/gallery" method="get">
       <input type="submit" name="indexmove" value="tail"/>
     </form>
   </div>

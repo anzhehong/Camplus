@@ -16,6 +16,8 @@ public interface GalleryService {
 
     int getCurrentSize();
 
+    void addNewComment(GalleryComment gc);
+
     //get the origin images name and thumbnail name
     List<Pair<String, String>> getImages();
 

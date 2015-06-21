@@ -14,5 +14,6 @@ public interface UserService {
     public int checkIdentity(String userId,String userPassword);
     public void userRegister(User user);
     public User getById(String id);
+    public void updateUser(User user);
 }
 

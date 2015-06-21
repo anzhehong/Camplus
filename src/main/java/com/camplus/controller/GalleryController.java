@@ -1,5 +1,7 @@
 package com.camplus.controller;
 
+import com.camplus.entity.CarpoolOrder;
+import com.camplus.entity.GalleryComment;
 import com.camplus.entity.GalleryImage;
 import com.camplus.entity.User;
 import com.camplus.service.GalleryService;
@@ -12,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by fowafolo on 15/5/26.
@@ -31,8 +33,62 @@ public class GalleryController {
     private GalleryService service;
 
     @RequestMapping("")
-    public String gallery(Model model){
-        model.addAttribute("Images", service.queryAll());
+    public String gallery(Model model,HttpSession session,String indexmove){
+        java.util.List<GalleryImage> tmp=service.queryAll();
+        int itemsperpage=16;
+        int totalpage=tmp.size();
+        if(indexmove==null)indexmove="0";
+        if(indexmove.equals("head")){
+            session.setAttribute("index",new Integer(0));
+        }else if(indexmove.equals("tail")){
+            session.setAttribute("index",new Integer(totalpage/itemsperpage));
+        }else if(indexmove.equals("prev")){
+            Integer nowpage=(Integer)session.getAttribute("index");
+            if(nowpage==null){
+                session.setAttribute("index",new Integer(0));
+            }else{
+                if((nowpage)<0){
+                    ///Doing Nothing
+                }else{
+                    if(nowpage<=0)nowpage=1;
+                    session.setAttribute("index",new Integer(nowpage-1));
+                }
+            }
+        }else if(indexmove.equals("next")){
+            Integer nowpage=(Integer)session.getAttribute("index");
+            if(nowpage==null){
+                session.setAttribute("index",new Integer(0));
+            }else{
+                if((nowpage+1)>totalpage/itemsperpage){
+                    ///Doing Nothing
+                }else{
+                    session.setAttribute("index",new Integer(nowpage+1));
+                }
+            }
+        }else{
+            Integer targetpage=Integer.parseInt(indexmove)-1;
+            if(targetpage>=1&&targetpage<=totalpage/itemsperpage){
+                session.setAttribute("index",targetpage);
+            }else{
+                session.setAttribute("index",new Integer(0));
+            }
+        }
+        ///Page Counting
+        Integer nowpage=(Integer)session.getAttribute("index");
+        Iterator<GalleryImage> iter;
+        iter=tmp.iterator();
+        int cnt=0;
+        Vector<GalleryImage> vec=new Vector<GalleryImage>();
+        while(iter.hasNext()){
+            GalleryImage g=iter.next();
+            //System.out.println(g.getCarpoolDepartureTime());
+            if(cnt>=(nowpage)*itemsperpage&&cnt<(nowpage+1)*itemsperpage){
+                vec.add(g);
+            }else if(cnt>=(nowpage+1)*itemsperpage)break;
+            cnt++;
+        }
+        model.addAttribute("Images",vec);
+
         return "Gallery/galleryHome";
     }
 
@@ -45,13 +101,14 @@ public class GalleryController {
     }
 
     @RequestMapping("/comment")
-    String newComment(String imageId,String message,Model model) {
-        model.addAttribute("imageId",imageId);
-        model.addAttribute("message",message);
-
-
-
-        return "Gallery/galleryNewComment";
+    String newComment(String imageId,HttpSession session,String message,Model model) {
+        GalleryComment gc=new GalleryComment();
+        gc.setGalleryImgId(imageId);
+        gc.setGalleryCommentContent(message);
+        gc.setGalleryCommentId(((User)session.getAttribute("userSession")).getUserId()+new Date().getTime());
+        service.addNewComment(gc);
+        model.addAttribute("givenMessage","You have successfully commented!");
+        return "Gallery/galleryNotification";
     }
 
     @RequestMapping("/mySpace")

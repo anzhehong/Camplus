@@ -16,7 +16,7 @@
       setTimeout(go,3000);
     }
     function go(){
-      window.location.href="/camplus/gallery/mySpace";
+      window.location.href="/camplus/gallery";
     }
   </script>
 </head>
@@ -26,6 +26,6 @@ ${givenMessage}
 
 <br>
 
-<a href="<c:url value=" /camplus/gallery/mySpace"/>">Redirection Automatically In 3 sec</a>
+<a href="<c:url value=" /camplus/gallery"/>">Redirection Automatically In 3 sec</a>
 
 </body></html>

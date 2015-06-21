@@ -4,8 +4,11 @@ import com.camplus.entity.User;
 import com.camplus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * Created by fowafolo on 15/5/12.
@@ -40,12 +43,12 @@ public class UserController {
 
     @RequestMapping("/checkUserPassword")
     @ResponseBody
-    public boolean checkUserPassword(String userId,String userPassword){
+    public boolean checkUserPassword(String userId, String userPassword) {
         User user = userService.getById(userId);
         System.out.println(user);
-        if(user.getUserPassword().equals(userPassword)){
+        if (user.getUserPassword().equals(userPassword)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -67,17 +70,43 @@ public class UserController {
 //    }
     @RequestMapping("/checkUserIdExist")
     @ResponseBody
-    public boolean check(String userId){
+    public boolean check(String userId) {
         User user = userService.getById(userId);
-        if(user != null){
+        if (user != null) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
     @RequestMapping("/editInfo")
-    public String editInfo() {
-        return "selfInfo";
+    public String editInfo(HttpSession session, Model model, String uid, String uname, String contact, String password, String repassword) {
+        User user = (User) session.getAttribute("userSession");
+        model.addAttribute("studentnum", user.getUserId());
+        if (uname == null) {
+            model.addAttribute("givenMessage", "请完成下列表格！");
+            return "selfInfo";
+        } else if (contact == null) {
+            model.addAttribute("givenMessage", "请重新输入你的联系方式！");
+            return "selfInfo";
+        } else if (password == null) {
+            model.addAttribute("givenMessage", "请输入你的新密码！");
+            return "selfInfo";
+        } else if (repassword == null) {
+            model.addAttribute("givenMessage", "请确认你的新密码！");
+            return "selfInfo";
+        } else if (!password.equals(repassword)) {
+            model.addAttribute("givenMessage", "您两次输入的密码不一致，请重新确认！");
+            return "selfInfo";
+        } else {
+            User nuser = new User();
+            nuser.setUserId(uid);
+            nuser.setUserName(uname);
+            nuser.setUserPassword(password);
+            nuser.setUserExperience(0);
+            nuser.setUserLevel(0);
+            userService.updateUser(nuser);
+            return "index";
+        }
     }
 }

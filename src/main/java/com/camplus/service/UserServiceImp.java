@@ -41,5 +41,10 @@ public class UserServiceImp implements UserService {
     public User getById(String id) {
         return userDAO.queryById(id);
     }
+
+    @Override
+    public void updateUser(User user) {
+        userDAO.update(user);
+    }
 }
 

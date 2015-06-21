@@ -104,7 +104,8 @@
 <div class="booking-info">
   <h3>个人信息</h3>
 </div>
-
+${givenMessage}
+<form method="post" action="#">
 <div class="online_reservation" style="margin-bottom: 30px">
   <div class="b_room">
     <div class="booking_room">
@@ -113,35 +114,35 @@
           <li class="span1_of_1" style="margin-left: 30px">
             <h4 style="font-weight: lighter">学号</h4>
             <div class="book_date"style="border: thin solid #c5c5c5;border-radius: 3px">
-              <input type="text" value="" >
+              <input type="text" name="uid" value="${studentnum}" contenteditable="false">
             </div>
           </li>
           <div class="clearfix"></div>
           <li class="span1_of_1" style="margin-left: 30px">
             <h4 style="font-weight: lighter">用户名</h4>
             <div class="book_date"style="border: thin solid #c5c5c5;border-radius: 3px">
-              <input type="text" value="" >
+              <input type="text" name="uname" value="" >
             </div>
           </li>
           <div class="clearfix"></div>
           <li class="span1_of_1" style="margin-left: 30px">
             <h4 style="font-weight: lighter">密码</h4>
             <div class="book_date"style="width:300px;border: thin solid #c5c5c5;border-radius: 3px">
-              <input type="text" value="" >
+              <input type="password" name="password" value="" >
             </div>
           </li>
           <div class="clearfix"></div>
           <li class="span1_of_1" style="margin-left: 30px">
             <h4 style="font-weight: lighter">重输密码</h4>
             <div class="book_date"style="width:300px;border: thin solid #c5c5c5;border-radius: 3px">
-              <input type="text" value="" >
+              <input type="password" value="" name="repassword">
             </div>
           </li>
           <div class="clearfix"></div>
           <li class="span1_of_1" style="margin-left: 30px">
             <h4 style="font-weight: lighter">联系方式</h4>
             <div class="book_date"style="width:300px;border: thin solid #c5c5c5;border-radius: 3px">
-              <input type="text" value="" >
+              <input type="text" value="" name="contact">
             </div>
           </li>
           <div class="clearfix"></div>
@@ -156,6 +157,7 @@
     <div class="clearfix"></div>
   </div>
 </div>
+</form>
 
 </body>
 </html>

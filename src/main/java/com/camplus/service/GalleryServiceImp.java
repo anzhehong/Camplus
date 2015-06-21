@@ -5,10 +5,12 @@ import com.camplus.DAO.GalleryDAO;
 import com.camplus.entity.GalleryComment;
 import com.camplus.entity.GalleryImage;
 import javafx.util.Pair;
+import org.omg.CosNaming.BindingIteratorOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -34,6 +36,11 @@ public class GalleryServiceImp implements GalleryService {
     }
 
     @Override
+    public void addNewComment(GalleryComment gc) {
+        galleryCommentDAO.insert(gc);
+    }
+
+    @Override
     public List<Pair<String, String>> getImages() {
         return null;
     }
@@ -53,6 +60,11 @@ public class GalleryServiceImp implements GalleryService {
     @Override
     public void removeById(String mid) {
         GalleryImage gi=galleryDAO.queryById(mid);
+        List<GalleryComment> list=galleryCommentDAO.getAllbyGID(mid);
+        Iterator<GalleryComment> iter=list.iterator();
+        while(iter.hasNext()){
+            galleryCommentDAO.delete(iter.next());
+        }
         galleryDAO.delete(gi);
     }
 
