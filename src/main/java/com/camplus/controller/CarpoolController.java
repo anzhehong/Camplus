@@ -231,10 +231,11 @@ public class CarpoolController {
         co.setCarpoolNumberOfStudent(Integer.parseInt(Cnumber));
         Scanner sc=new Scanner(Cdate);
         sc.useDelimiter("/");
-        int iyear=Integer.parseInt(sc.next().trim());
         int imonth=Integer.parseInt(sc.next().trim());
         int iday=Integer.parseInt(sc.next().trim());
-        co.setCarpoolDepartureTime(new Date(iyear, imonth, iday, Integer.parseInt(Chour), Integer.parseInt(Cminute),0));
+        int iyear=Integer.parseInt(sc.next().trim());
+        Date d=new Date(iyear-1900, imonth, iday, Integer.parseInt(Chour), Integer.parseInt(Cminute));
+        co.setCarpoolDepartureTime(d);
         co.setCarpoolId(user.getUserId()+new java.util.Date().getTime());
         carpoolService.commit(co);
         return "/Carpool/carpoolNotification";
