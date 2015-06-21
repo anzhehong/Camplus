@@ -17,6 +17,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -52,7 +53,14 @@ public class GalleryController {
     }
 
     @RequestMapping("/mySpace")
-    String mySpace(){
+    String mySpace(Model model,HttpSession session,String imageid){
+        if(imageid!=null){
+            service.removeById(imageid);
+        }
+        User user=(User)session.getAttribute("userSession");
+        String uid=user.getUserId();
+        ArrayList<GalleryImage> arrimg=(ArrayList)service.getImagesByUID(uid);
+        model.addAttribute("images",arrimg);
         return "Gallery/galleryMySpace";
     }
 
@@ -143,7 +151,8 @@ public class GalleryController {
         }catch(Exception e){
             e.printStackTrace();
         }finally {
-            return "Gallery/galleryMySpace";
+            model.addAttribute("givenMessage","Successfully Uploaded!");
+            return "Gallery/galleryNotification";
         }
     }
 }

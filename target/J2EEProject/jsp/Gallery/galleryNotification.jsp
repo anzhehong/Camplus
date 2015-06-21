@@ -16,7 +16,7 @@
       setTimeout(go,3000);
     }
     function go(){
-      window.location.href="/camplus/carpool/select";
+      window.location.href="/camplus/gallery/mySpace";
     }
   </script>
 </head>

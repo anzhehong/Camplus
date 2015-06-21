@@ -21,5 +21,8 @@ public interface GalleryService {
 
     List<GalleryComment> getAllComment();
 
+    List<GalleryImage> getImagesByUID(String uid);
     void upload(GalleryImage gi);
+
+    void removeById(String mid);
 }

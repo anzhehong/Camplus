@@ -64,7 +64,6 @@
   </script>
 </head>
 
-<body>
 
 <%
   User currentUser = (User)session.getAttribute("userSession");
@@ -162,11 +161,24 @@
 <div class="gallery">
   <div class="wrap">
     <ul>
-      <img src="/camplus/Images/gallery/s000001.png" alt="Image" style="margin: 15px"/>
-      <img src="/camplus/Images/gallery/s000002.png" alt="Image" style="margin: 15px"/>
-      <img src="/camplus/Images/gallery/s000003.png" alt="Image" style="margin: 15px"/>
-      <img src="/camplus/Images/gallery/s000004.png" alt="Image" style="margin: 15px"/>
+      <style type="text/css">
+        .delForm {
+          margin-left : 125px;
+        }
+        .pics {
+          display: inline-block;
+        }
+      </style>
 
+      <c:forEach items="${images}" var="image">
+     <div class = 'pics'>
+        <img src="/camplus/Images/gallery/s${image.galleryImageId}.png" alt="Image" style="margin:15px"/>
+        <form action="/camplus/gallery/mySpace" type="get" class = 'delForm'>
+          <input type="hidden" name="imageid" value="${image.galleryImageId}"/>
+          <input type="submit" value="删除"/>
+        </form>
+       </div>
+      </c:forEach>
       <div class="clear"></div>
     </ul>
   </div>

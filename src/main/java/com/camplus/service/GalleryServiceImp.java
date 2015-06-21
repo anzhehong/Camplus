@@ -43,6 +43,17 @@ public class GalleryServiceImp implements GalleryService {
         return galleryCommentDAO.queryAll();
     }
 
+    public List<GalleryImage> getImagesByUID(String uid) {
+        return galleryDAO.getImageByUID(uid);
+    }
+
     @Override
     public void upload(GalleryImage gi){ galleryDAO.insert(gi); }
+
+    @Override
+    public void removeById(String mid) {
+        GalleryImage gi=galleryDAO.queryById(mid);
+        galleryDAO.delete(gi);
+    }
+
 }
