@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="J2EEProject:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="J2EEProject.war">
+      <element id="artifact" artifact-name="J2EEProject:war exploded" />
+    </root>
+  </artifact>
+</component>
