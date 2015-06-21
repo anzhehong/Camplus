@@ -40,6 +40,7 @@ public class GalleryController {
     @RequestMapping("/hotComment")
     String hotComment(Model model){
         model.addAttribute("comments", service.getAllComment());
+
         return "Gallery/galleryHotComment";
     }
 
@@ -47,6 +48,7 @@ public class GalleryController {
     String newComment(String imageId,String message,Model model) {
         model.addAttribute("imageId",imageId);
         model.addAttribute("message",message);
+
 
 
         return "Gallery/galleryNewComment";

@@ -126,7 +126,10 @@
       <c:forEach items="${comments}" var="var">
         <div class="box">
           <img src="/camplus/Images/gallery/s${var.galleryImgId}.png" alt="" />
-          <h3>CoomentId: ${var.galleryCommentId}</h3>
+          <h3>ImageId: ${var.galleryCommentId}</h3>
+          <p>${var.galleryCommentContent}</p>
+          <p>${var.galleryCommentContent}</p>
+          <p>${var.galleryCommentContent}</p>
           <p>${var.galleryCommentContent}</p>
         </div>
       </c:forEach>

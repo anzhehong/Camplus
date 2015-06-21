@@ -48,13 +48,10 @@
       var contents = [];
       contents[0] = header.innerHTML;
       contents[1] = header.parentNode.nextSibling.nextSibling.innerHTML;
-      console.log(header);
       header = header.parentNode.nextSibling.nextSibling.nextSibling.nextSibling;
-      console.log(header);
       for(var i = 2 ; i != 8 && header != null ; ++i) {
         contents[i] = header.innerHTML;
         header = header.nextSibling.nextSibling;
-        console.log(header);
       }
 
       //msgDiv
@@ -73,14 +70,14 @@
       msgDiv.style.display = bgDiv.style.display = "block";
       var msgDetail = document.getElementById("msgDetail");
       msgDetail.innerHTML = "<p style='line-height:50px;font-size:30px;text-align:center'>订单详情</p>" +
-      "<p style='margin-left: 20px'>订单号:"+ contents[0] +"</p>" +
+      "<p style='margin-left: 20px' id='requestID'>订单号:"+ contents[0] +"</p>" +
       "<p style='margin-left: 20px'>出发地:"+ contents[1] +"</p>" +
       "<p style='margin-left: 20px'>目的地:"+ contents[2] +"</p>" +
       "<p style='margin-left: 20px'>出发时间:"+ contents[4] +"</p>" +
       "<p style='margin-left: 20px'>人数:"+ contents[5] +"</p>" +
       "<p style='margin-left: 20px'>车型:"+ contents[7] +"</p>" +
       "<p style='margin-left: 20px'>备注:"+ contents[6] +"</p>" +
-      "<p style='margin-left: 20px'>提交者:"+ contents[3] +"</p>";}
+      "<p style='margin-left: 20px' id='requestSource'>提交者:"+ contents[3] +"</p>";}
   </script>
 
 </head>
@@ -166,6 +163,7 @@
   <%--});--%>
   <%--})();--%>
   <%--</script>--%>
+  <% %>
   <form action="/camplus/carpool/select" method="get">
   <div class="online_reservation">
     <div class="b_room">
@@ -303,7 +301,9 @@
     </tr>
   </c:forEach>
 </tbody>
-
+<%
+  if(request.getAttribute("departure")==null||request.getAttribute("destination")==null){
+%>
 </table>
 <div class="container">
   <div class="page-select">
@@ -325,7 +325,43 @@
     </form>
   </div>
 </div>
-
+<%
+  }else{
+%>
+</table>
+<div class="container">
+  <div class="page-select">
+    <form action="/camplus/carpool/select" method="get">
+      <input type="hidden" name="departure" value="${requestScope.departure}"/>
+      <input type="hidden" name="destination" value="${requestScope.destination}"/>
+      <input type="submit" name="indexmove" value="head"/>
+    </form>
+    <form action="/camplus/carpool/select?departure=${requestScope.departure}&desination=${requestScope.destination}" method="get">
+      <input type="hidden" name="departure" value="${requestScope.departure}"/>
+      <input type="hidden" name="destination" value="${requestScope.destination}"/>
+      <input type="submit" name="indexmove" value="prev"/>
+    </form>
+    <form action="/camplus/carpool/select?departure=${requestScope.departure}&desination=${requestScope.destination}" method="get">
+      <input type="hidden" name="departure" value="${requestScope.departure}"/>
+      <input type="hidden" name="destination" value="${requestScope.destination}"/>
+      <input type="text" name="indexmove" value="${sessionScope.index+1}"/>
+      <input type="submit" value="Go"/>
+    </form>
+    <form action="/camplus/carpool/select?departure=${requestScope.departure}&desination=${requestScope.destination}" method="get">
+      <input type="hidden" name="departure" value="${requestScope.departure}"/>
+      <input type="hidden" name="destination" value="${requestScope.destination}"/>
+      <input type="submit" name="indexmove" value="next"/>
+    </form>
+    <form action="/camplus/carpool/select?departure=${requestScope.departure}&desination=${requestScope.destination}" method="get">
+      <input type="hidden" name="departure" value="${requestScope.departure}"/>
+      <input type="hidden" name="destination" value="${requestScope.destination}"/>
+      <input type="submit" name="indexmove" value="tail"/>
+    </form>
+  </div>
+</div>
+<%
+  }
+%>
 <form action="/camplus/carpool/new" method="get">
 <div class="online_reservation">
   <div class="b_room">
@@ -450,10 +486,23 @@
 <div id="bgDiv"></div>
 <div id="msgDiv" style="background: #f5f5f5;border: thin solid #c5c5c5;border-radius: 6px;">
   <div id="msgDetail">
-    <p>d</p>
+    <p></p>
   </div>
   <div style="text-align: center">
-    <input type="button" id="msgShut" value="关闭" style="margin: auto;font-size:18px;font-weight: bold;height: 40px;width:80px;background-color: #FFD700;border-radius: 6px">
+    <form action="/camplus/carpool/cancel" method="get">
+      <input type="hidden" id = "id" name="oid" value = "">
+      <input type="hidden" id = "requestOwner" name="ownerId" value = "">
+      <script>
+        var getRequest = function(){
+          console.log(document.getElementById("requestID").innerHTML);
+          document.getElementById("id").setAttribute("value",document.getElementById("requestID").innerHTML);
+          document.getElementById("requestOwner").setAttribute("value",document.getElementById("requestSource").innerHTML);
+        }
+
+      </script>
+      <input type="submit" id="msgCancel" value="撤销" onclick="getRequest()" style="margin: auto;font-size:18px;font-weight: bold;height: 40px;width:80px;background-color: #FFD700;border-radius: 6px"/>
+      <input type="button" id="msgShut" value="关闭" style="margin: auto;font-size:18px;font-weight: bold;height: 40px;width:80px;background-color: #FFD700;border-radius: 6px">
+    </form>
   </div>
 </div>
 

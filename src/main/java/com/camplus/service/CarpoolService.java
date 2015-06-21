@@ -12,7 +12,7 @@ import java.util.PriorityQueue;
 public interface CarpoolService {
     public List<CarpoolOrder> getAllbyDestAndDept(String destination,String departure);
     public List<CommenPlace> getAllPlace();
-    public List<CarpoolOrder> getAllOrder();
+    public PriorityQueue<CarpoolOrder> getAllOrder();
     public CarpoolOrder getDetailbyId(String id);
     public void commit(CarpoolOrder co);
     public void cancelOrderbyId(String orderId);

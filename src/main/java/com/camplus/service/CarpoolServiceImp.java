@@ -34,8 +34,16 @@ public class CarpoolServiceImp implements CarpoolService{
         return carpoolDAO.getAllPlace();
     }
 
-    public List<CarpoolOrder> getAllOrder(){
-        return carpoolOrderDAO.queryAll();
+    public PriorityQueue<CarpoolOrder> getAllOrder(){
+        Date date=new Date();
+        PriorityQueue<CarpoolOrder> sorted=new PriorityQueue<CarpoolOrder>(new OrderResolver(date.getYear(),date.getMonth(),date.getDay(),date.getHours(),date.getMinutes()));
+        Iterator<CarpoolOrder> iter=(carpoolOrderDAO.queryAll()).iterator();
+        while(iter.hasNext()){
+            CarpoolOrder co=iter.next();
+            sorted.add(co);
+            System.out.println(co.getCarpoolDepartureTime());
+        }
+        return sorted;
     }
 
     public CarpoolOrder getDetailbyId(String id){ return carpoolOrderDAO.queryById(id);}
@@ -56,7 +64,7 @@ public class CarpoolServiceImp implements CarpoolService{
         Integer gohour=Integer.parseInt(hour);
         Integer gominute=Integer.parseInt(minute);
         OrderResolver or=new OrderResolver(goyear,gomonth,goday,gohour,gominute);
-        PriorityQueue<CarpoolOrder> filtered=new PriorityQueue<CarpoolOrder>(100,or);
+        PriorityQueue<CarpoolOrder> filtered=new PriorityQueue<CarpoolOrder>(or);
         while(iter.hasNext()){
             CarpoolOrder co=iter.next();
             if(co.getCarpoolNumberOfStudent()<Integer.parseInt(number.trim()))continue;
@@ -78,9 +86,9 @@ class OrderResolver implements Comparator<CarpoolOrder>{
         Date d1=o1.getCarpoolDepartureTime();
         Date d2=o2.getCarpoolDepartureTime();
         long diff1=Math.abs(d1.getTime() - date.getTime());
-        long diff2=Math.abs(d1.getTime()-date.getTime());
-        if(diff1<diff2)return 1;
-        else if(diff1>diff2)return -1;
+        long diff2=Math.abs(d2.getTime()-date.getTime());
+        if(diff1<diff2)return -1;
+        else if(diff1>diff2)return 1;
         else return 0;
     }
 }

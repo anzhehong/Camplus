@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -26,25 +27,29 @@ public class CarpoolController {
 
 
     @RequestMapping("/select")
-    public String selectMenu(HttpSession session,Model model,String departure,String destination,String indexmove,String hour,String minute,String datepicker,String number){
+    public String selectMenu(HttpServletRequest request,HttpSession session,Model model,String departure,String destination,String indexmove,String hour,String minute,String datepicker,String number){
         //carpoolService.getAllbyAll(destination,departure,datepicker,hour,minute,number);
         ArrayList<CommenPlace> cp=(ArrayList<CommenPlace>)carpoolService.getAllPlace();
         model.addAttribute("places",cp);
-        ArrayList<CarpoolOrder> cos;
         PriorityQueue<CarpoolOrder> cop;
         boolean bContainer;
         if(departure==null&&destination==null){
-            cos=(ArrayList<CarpoolOrder>)carpoolService.getAllOrder();
-            cop=null;
-            bContainer=false;
+            cop=carpoolService.getAllOrder();
         }else{
+            if(datepicker==null||hour==null||number==null){
+                Date date = new Date();
+                hour = "" + date.getHours();
+                minute = "" + date.getMinutes();
+                datepicker = "" + date.getMonth() + "/" + date.getDay() + "/" + (date.getYear() + 1900);
+                number = "" + 0;
+            }
             cop=carpoolService.getAllbyAll(destination,departure,datepicker,hour,minute,number);
-            cos=null;
-            bContainer=true;
+            request.setAttribute("departure",departure);
+            request.setAttribute("destination",destination);
         }
         ///indeces
         int itemsperpage=10;
-        int totalpage=bContainer?cop.size():cos.size();
+        int totalpage=cop.size();
         if(indexmove==null)indexmove="0";
         if(indexmove.equals("head")){
             session.setAttribute("index",new Integer(0));
@@ -84,15 +89,12 @@ public class CarpoolController {
         ///Page Counting
         Integer nowpage=(Integer)session.getAttribute("index");
         Iterator<CarpoolOrder> iter;
-        if(bContainer){
-            iter=cop.iterator();
-        }else{
-            iter=cos.iterator();
-        }
+        iter=cop.iterator();
         int cnt=0;
         Vector<CarpoolOrder> vec=new Vector<CarpoolOrder>();
         while(iter.hasNext()){
             CarpoolOrder c=iter.next();
+            System.out.println(c.getCarpoolDepartureTime());
             if(cnt>=(nowpage)*itemsperpage&&cnt<(nowpage+1)*itemsperpage){
                 vec.add(c);
             }else if(cnt>=(nowpage+1)*itemsperpage)break;
@@ -205,9 +207,17 @@ public class CarpoolController {
     }
 
     @RequestMapping("/cancel")
-    public String cancenDetail(String orderId,String ownerId,HttpSession session,Model model){
-        if(((User)session.getAttribute("userSession")).getUserId().equals(ownerId)) {
-            carpoolService.cancelOrderbyId(orderId);
+    public String cancenDetail(String oid,String ownerId,HttpSession session,Model model){
+        Scanner scor=new Scanner(oid);
+        scor.useDelimiter(":");
+        String p1=scor.next();
+        String p2=scor.next().trim();
+        Scanner scow=new Scanner(ownerId);
+        scow.useDelimiter(":");
+        String q1=scow.next();
+        String q2=scow.next();
+        if(((User)session.getAttribute("userSession")).getUserId().equals(q2)) {
+            carpoolService.cancelOrderbyId(p2);
             model.addAttribute("givenMessage","Your Request Successfully Cancelled");
             return "/Carpool/carpoolNotification";
         }else{
