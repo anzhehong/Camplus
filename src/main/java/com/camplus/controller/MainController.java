@@ -1,5 +1,6 @@
 package com.camplus.controller;
 
+import com.camplus.entity.MailMessage;
 import com.camplus.entity.User;
 import com.camplus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -112,6 +114,33 @@ private UserService userService;
     public String information(){
 //        return "Information/informationHome";
         return "Information/restaurantHome";
+    }
+
+    @RequestMapping("/sendMail")
+    public String sendMail(String messageToSend){
+        MailMessage message = new MailMessage();
+        message.setTo("anzhehong@126.com");
+        message.setFrom("anzhehong@126.com");
+        message.setSubject("Camplus 用户来信");
+        message.setUser("anzhehong");
+        message.setContent(messageToSend);
+        message.setDatato("anzhehong@126.com");
+        message.setDatafrom("anzhehong@qq.com");
+        message.setPassword("661518");
+
+        System.out.println("lalallaalalaldfjlasdjfl j121231231231231231231231231231231");
+        System.out.println(messageToSend);
+
+        SendMail send = SendMailImp.getInstance(SendMailImp.WANGYI126).setMessage(message);
+        try {
+            send.sendMail();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            return "index";
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 <%@ page import="com.camplus.entity.User" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page contentType="text/html;charset=utf-8" language="java" %>
 
 <!DOCTYPE html>
 <html>
@@ -128,8 +128,8 @@
             <div class="clearfix"> </div>
             <div class="search">
                 <p>Contact Us </p>
-                <form>
-                    <input type="text" placeholder="Message..." required="">
+                <form action="<c:url value="/sendMail"></c:url>" method="post">
+                    <input type="text" placeholder="Message..." required="" name="messageToSend">
                     <input type="submit" value="Send Us Email">
                 </form>
             </div>

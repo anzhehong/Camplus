@@ -128,14 +128,14 @@ ${givenMessage}
           <li class="span1_of_1" style="margin-left: 30px">
             <h4 style="font-weight: lighter">密码</h4>
             <div class="book_date"style="width:300px;border: thin solid #c5c5c5;border-radius: 3px">
-              <input type="text" name="password" value="" >
+              <input type="password" name="password" value="" >
             </div>
           </li>
           <div class="clearfix"></div>
           <li class="span1_of_1" style="margin-left: 30px">
             <h4 style="font-weight: lighter">重输密码</h4>
             <div class="book_date"style="width:300px;border: thin solid #c5c5c5;border-radius: 3px">
-              <input type="text" value="" name="repassword">
+              <input type="password" value="" name="repassword">
             </div>
           </li>
           <div class="clearfix"></div>

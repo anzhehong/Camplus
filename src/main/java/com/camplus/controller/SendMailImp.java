@@ -239,6 +239,7 @@ public class SendMailImp implements SendMail {
         this.getOutput().newLine();
         this.getOutput().write("TO:" + this.getMessage().getDatato());
         this.getOutput().newLine();
+        System.out.println(this.getMessage().getSubject());
         this.getOutput().write("SUBJECT:" + this.getMessage().getSubject());
         this.getOutput().newLine();
         this.getOutput().newLine();
