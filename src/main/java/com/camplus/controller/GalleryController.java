@@ -21,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by fowafolo on 15/5/26.
@@ -34,7 +35,7 @@ public class GalleryController {
 
     @RequestMapping("")
     public String gallery(Model model,HttpSession session,String indexmove){
-        java.util.List<GalleryImage> tmp=service.queryAll();
+        List<GalleryImage> tmp=service.queryAll();
         int itemsperpage=16;
         int totalpage=tmp.size();
         if(indexmove==null)indexmove="0";
@@ -94,9 +95,61 @@ public class GalleryController {
 
 
     @RequestMapping("/hotComment")
-    String hotComment(Model model){
-        model.addAttribute("comments", service.getAllComment());
-
+    String hotComment(Model model,HttpSession session,String indexmove){
+        List<GalleryComment> tmp=service.getAllComment();
+        int itemsperpage=16;
+        int totalpage=tmp.size();
+        if(indexmove==null)indexmove="0";
+        if(indexmove.equals("head")){
+            session.setAttribute("index",new Integer(0));
+        }else if(indexmove.equals("tail")){
+            session.setAttribute("index",new Integer(totalpage/itemsperpage));
+        }else if(indexmove.equals("prev")){
+            Integer nowpage=(Integer)session.getAttribute("index");
+            if(nowpage==null){
+                session.setAttribute("index",new Integer(0));
+            }else{
+                if((nowpage)<0){
+                    ///Doing Nothing
+                }else{
+                    if(nowpage<=0)nowpage=1;
+                    session.setAttribute("index",new Integer(nowpage-1));
+                }
+            }
+        }else if(indexmove.equals("next")){
+            Integer nowpage=(Integer)session.getAttribute("index");
+            if(nowpage==null){
+                session.setAttribute("index",new Integer(0));
+            }else{
+                if((nowpage+1)>totalpage/itemsperpage){
+                    ///Doing Nothing
+                }else{
+                    session.setAttribute("index",new Integer(nowpage+1));
+                }
+            }
+        }else{
+            Integer targetpage=Integer.parseInt(indexmove)-1;
+            if(targetpage>=1&&targetpage<=totalpage/itemsperpage){
+                session.setAttribute("index",targetpage);
+            }else{
+                session.setAttribute("index",new Integer(0));
+            }
+        }
+        ///Page Counting
+        Integer nowpage=(Integer)session.getAttribute("index");
+        Iterator<GalleryComment> iter;
+        iter=tmp.iterator();
+        int cnt=0;
+        Vector<GalleryComment> vec=new Vector<GalleryComment>();
+        while(iter.hasNext()){
+            GalleryComment g=iter.next();
+            //System.out.println(g.getCarpoolDepartureTime());
+            if(cnt>=(nowpage)*itemsperpage&&cnt<(nowpage+1)*itemsperpage){
+                vec.add(g);
+            }else if(cnt>=(nowpage+1)*itemsperpage)break;
+            cnt++;
+        }
+        model.addAttribute("comments",vec);
         return "Gallery/galleryHotComment";
     }
 
@@ -128,6 +181,7 @@ public class GalleryController {
         try {
             if(image.isEmpty()){
                 model.addAttribute("givenMessage","Please select a file!");
+                return "Gallery/galleryNotification";
             }else {
                 String path = session.getServletContext().getRealPath("/Images/gallery");
                 String tmpName = image.getOriginalFilename();
@@ -156,10 +210,12 @@ public class GalleryController {
                     int width=256,height=200;
                     int owidth=src.getWidth();
                     int oheight=src.getHeight();
+                    double percentage=(double)oheight/(double)owidth;
+                    int nheight=(int)(percentage*1000);
                     Image im=src.getScaledInstance(width,height,Image.SCALE_DEFAULT);
-                    Image oim=src.getScaledInstance(owidth,oheight,Image.SCALE_DEFAULT);
+                    Image oim=src.getScaledInstance(1000,nheight,Image.SCALE_DEFAULT);
                     BufferedImage tag=new BufferedImage(width,height, BufferedImage.TYPE_INT_RGB);
-                    BufferedImage otag=new BufferedImage(owidth,oheight,BufferedImage.TYPE_INT_RGB);
+                    BufferedImage otag=new BufferedImage(1000,nheight,BufferedImage.TYPE_INT_RGB);
                     Graphics g=tag.getGraphics();
                     Graphics og=otag.getGraphics();
                     g.drawImage(im,0,0,null);
@@ -193,12 +249,22 @@ public class GalleryController {
                     File destFile=new File(fullname_comp);
                     BufferedImage src= ImageIO.read(srcFile);
                     int width=256,height=200;
+                    int owidth=src.getWidth();
+                    int oheight=src.getHeight();
+                    double percentage=(double)oheight/(double)owidth;
+                    int nheight=(int)(percentage*1000);
                     Image im=src.getScaledInstance(width,height,Image.SCALE_DEFAULT);
+                    Image oim=src.getScaledInstance(1000,nheight,Image.SCALE_DEFAULT);
                     BufferedImage tag=new BufferedImage(width,height, BufferedImage.TYPE_INT_RGB);
+                    BufferedImage otag=new BufferedImage(1000,nheight,BufferedImage.TYPE_INT_RGB);
                     Graphics g=tag.getGraphics();
-                    g.drawImage(im,0,0,null);
+                    Graphics og=otag.getGraphics();
+                    g.drawImage(im, 0, 0, null);
+                    og.drawImage(oim, 0, 0, null);
+                    og.dispose();
                     g.dispose();
                     boolean flag=ImageIO.write(tag,"png",new FileOutputStream(destFile));
+                    flag=ImageIO.write(otag,"jpg",new FileOutputStream(srcFile));
                     GalleryImage gi=new GalleryImage();
                     gi.setGalleryImageId(realName);
                     gi.setGalleryImageLoveCount(0);
@@ -207,10 +273,11 @@ public class GalleryController {
                     service.upload(gi);
                 }
             }
+            model.addAttribute("givenMessage","Successfully Uploaded!");
+            return "Gallery/galleryNotification";
         }catch(Exception e){
             e.printStackTrace();
-        }finally {
-            model.addAttribute("givenMessage","Successfully Uploaded!");
+            model.addAttribute("givenMessage","Error!!");
             return "Gallery/galleryNotification";
         }
     }

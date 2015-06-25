@@ -32,7 +32,7 @@ public class CourseMsgDAOImp extends GeneralDAOImp<CourseMessage> implements Cou
 
     public ArrayList<CourseMessage> getCourseMsgsbycourseIdAndIndex(String courseId,int index) {
         ArrayList<CourseMessage> arrCrsMsg;
-        String hql = "from CourseMessage as cm where cm.courseId = ?";
+        String hql = "from CourseMessage as cm where cm.courseId = ? order by cm.courseMessGiverTime";
         Query query = super.sessionFactory.getCurrentSession().createQuery(hql);
         query.setString(0, courseId);
         arrCrsMsg = (ArrayList<CourseMessage>) query.list();

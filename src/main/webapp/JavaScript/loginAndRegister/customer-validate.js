@@ -48,6 +48,44 @@ jQuery(function($){
             }
         });
 
+        $("#selfInfoChangeForm").validate({
+            rules:{
+                password:{
+                    required:true,
+                    minlength:5
+                },
+                repassword:{
+                    required:true,
+                    minlength:5,
+                    equalTo:"#password"
+                },
+                uname:{
+                    required:true
+                },
+                contact:{
+                    required:true
+                }
+            },
+            messages:{
+
+                password:{
+                    required:"密码也不填啊亲╭(╯3╰)╮",
+                    minlength:"密码不能少于5位"
+                },
+                repassword:{
+                    required:"记得要验证密码啊╭(╯3╰)╮",
+                    minlength:"确认密码不能少于5喂",
+                    equalTo: "两次输入密码不一致"
+                },
+                uname:{
+                    required:"请输入姓名！"
+                },
+                contact:{
+                    required:"联系方式不能少啊"
+                }
+            }
+        });
+
         $("#userRegister").validate({
             rules:{
                 userId:{

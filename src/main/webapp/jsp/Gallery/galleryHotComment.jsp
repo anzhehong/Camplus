@@ -86,9 +86,7 @@
           <li><a href="/camplus/jsp/index.jsp">Home</a></li>
 
           <li><a href="<c:url value="/carpool/select"></c:url> ">Carpool</a></li>
-          <!-- <li><a href="booking.html">EXCHANGE</a></li>  -->
           <li><a href="/camplus/jsp/CourseDiscussion/courseSearch.jsp">Course</a> </li>
-          <li><a href="/camplus/jsp/index.jsp">Exchange</a></li>
           <li onmouseover="showsubmenu(this)" onmouseout="hidesubmenu(this)"><a>Gallery</a>
             <ul class="submenu">
               <dd><a href="<c:url value="/gallery"></c:url> ">Album</a></dd>
@@ -96,7 +94,7 @@
               <dd><a href="<c:url value="/gallery/mySpace"></c:url> ">MySpace</a></dd>
             </ul>
           </li>
-          <li onmouseover="showsubmenu(this)" onmouseout="hidesubmenu(this)" style="color: whitesmoke">Information</a>
+          <li onmouseover="showsubmenu(this)" onmouseout="hidesubmenu(this)"><a>Information</a>
             <ul class="subMenu">
               <dd><a href="<c:url value="/information/locationHome"></c:url> ">Map</a></dd>
               <dd><a href="<c:url value="/restaurant"></c:url> ">Takeout</a></dd>
@@ -128,9 +126,6 @@
           <img src="/camplus/Images/gallery/s${var.galleryImgId}.png" alt="" />
           <h3>ImageId: ${var.galleryCommentId}</h3>
           <p>${var.galleryCommentContent}</p>
-          <p>${var.galleryCommentContent}</p>
-          <p>${var.galleryCommentContent}</p>
-          <p>${var.galleryCommentContent}</p>
         </div>
       </c:forEach>
 
@@ -139,14 +134,29 @@
 </div>
 <div class="clearfix"> </div>
 
-<div class="paginate">
-  <ul>
-    <li class="current"><a href="#">1</a></li>
-    <li><a href="#">2</a></li>
-    <li><a href="#">3</a></li>
-    <li><a href="#">Last</a></li>
-  </ul>
+<div class="container">
+  <div class="page-select">
+    <div class="clearfix"></div>
+    <form action="/camplus/gallery/hotComment" method="get">
+      <input type="submit" name="indexmove" value="head"/>
+    </form>
+    <form action="/camplus/gallery/hotComment" method="get">
+      <input type="submit" name="indexmove" value="prev"/>
+    </form>
+    <form action="/camplus/gallery/hotComment" method="get">
+      <input type="text" name="indexmove" value="${sessionScope.index+1}" />
+      <input type="submit" value="Go"/>
+    </form>
+    <form action="/camplus/gallery/hotComment" method="get">
+      <input type="submit" name="indexmove" value="next"/>
+    </form>
+    <form action="/camplus/gallery/hotComment" method="get">
+      <input type="submit" name="indexmove" value="tail"/>
+    </form>
+  </div>
 </div>
+
+
 <div class="footer">
   <div class="wrap">
     <div class="copy" style="font-weight: 900">

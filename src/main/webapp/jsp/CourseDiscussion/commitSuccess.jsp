@@ -8,9 +8,20 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title></title>
+<head>
+  <title>Dear Customer</title>
+  <script language="JavaScript">
+    function jump(){
+      setTimeout(go,3000);
+    }
+    function go(){
+      window.location.href="/camplus/courseDiscussion/showDetail?courseId=${sessionScope.courseId}";
+    }
+  </script>
 </head>
-<body>
-  ${userName},Successfully Committed Your Message!
+</head>
+<body onload="jump();">
+  ${userName}!
+  Successfully Committed Your Message!
 </body>
 </html>

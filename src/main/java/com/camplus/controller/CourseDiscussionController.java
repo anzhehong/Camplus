@@ -41,7 +41,7 @@ public class CourseDiscussionController {
 
     @RequestMapping("/showDetail")
     public String showDetail(HttpSession session,String courseId, Model courseInfo){
-
+        session.setAttribute("courseId",courseId);
         Course course = new Course();
         ArrayList<CourseMessage> courseArr=new ArrayList<CourseMessage>();
         course = courseService.getCourseById(courseId);

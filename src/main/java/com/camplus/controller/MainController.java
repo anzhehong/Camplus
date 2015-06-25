@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -117,19 +118,23 @@ private UserService userService;
     }
 
     @RequestMapping("/sendMail")
-    public String sendMail(String messageToSend){
+    public String sendMail(String messageToSend) throws UnsupportedEncodingException {
         MailMessage message = new MailMessage();
         message.setTo("anzhehong@126.com");
         message.setFrom("anzhehong@126.com");
-        message.setSubject("Camplus 用户来信");
+        String subject = "Camplus用户来信";
+        message.setSubject(subject);
         message.setUser("anzhehong");
+        String s = new String(messageToSend.getBytes("GBK"), "ISO8859-1");
         message.setContent(messageToSend);
         message.setDatato("anzhehong@126.com");
         message.setDatafrom("anzhehong@qq.com");
         message.setPassword("661518");
 
         System.out.println("lalallaalalaldfjlasdjfl j121231231231231231231231231231231");
+        System.out.println(s);
         System.out.println(messageToSend);
+
 
         SendMail send = SendMailImp.getInstance(SendMailImp.WANGYI126).setMessage(message);
         try {

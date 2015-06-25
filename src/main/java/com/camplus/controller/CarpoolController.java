@@ -79,6 +79,10 @@ public class CarpoolController {
                 }
             }
         }else{
+            String tmpIndex=new String(indexmove);
+            for(int i=0;i<indexmove.length();i++){
+                if(!Character.isDigit(tmpIndex.charAt(i)))indexmove="0";
+            }
             Integer targetpage=Integer.parseInt(indexmove)-1;
             if(targetpage>=1&&targetpage<=totalpage/itemsperpage){
                 session.setAttribute("index",targetpage);
@@ -101,6 +105,7 @@ public class CarpoolController {
             cnt++;
         }
         model.addAttribute("orders",vec);
+        model.addAttribute("totalpage",""+(nowpage+1)+"/"+(totalpage/10+1));
         return "/Carpool/carpoolHome";
     }
 

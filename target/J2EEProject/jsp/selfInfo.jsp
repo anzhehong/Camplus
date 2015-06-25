@@ -24,7 +24,11 @@
   <!-- start-smoth-scrolling -->
   <script type="text/javascript" src="/camplus/JavaScript/index/move-top.js"></script>
   <script type="text/javascript" src="/camplus/JavaScript/index/easing.js"></script>
+  <script src="/camplus/JavaScript/jquery.js"></script>
+  <script src="/camplus/JavaScript/jquery.validate.js"></script>
+  <script src="/camplus/JavaScript/loginAndRegister/customer-validate.js"></script>
   <script type="text/javascript">
+
     jQuery(document).ready(function($) {
       $(".scroll").click(function(event){
         event.preventDefault();
@@ -66,9 +70,7 @@
           <li><a href="/camplus/jsp/index.jsp">Home</a></li>
 
           <li><a href="<c:url value="/carpool/select"></c:url> ">Carpool</a></li>
-          <!-- <li><a href="booking.html">EXCHANGE</a></li>  -->
           <li><a href="/camplus/jsp/CourseDiscussion/courseSearch.jsp">Course</a> </li>
-          <li><a href="/camplus/jsp/index.jsp">Exchange</a></li>
           <li onmouseover="showsubmenu(this)" onmouseout="hidesubmenu(this)"><a>Gallery</a>
             <ul class="submenu">
               <dd><a href="<c:url value="/gallery"></c:url> ">Album</a></dd>
@@ -76,7 +78,7 @@
               <dd><a href="<c:url value="/gallery/mySpace"></c:url> ">MySpace</a></dd>
             </ul>
           </li>
-          <li onmouseover="showsubmenu(this)" onmouseout="hidesubmenu(this)" style="color: whitesmoke">Information</a>
+          <li onmouseover="showsubmenu(this)" onmouseout="hidesubmenu(this)"><a>Information</a>
             <ul class="subMenu">
               <dd><a href="<c:url value="/information/locationHome"></c:url> ">Map</a></dd>
               <dd><a href="<c:url value="/restaurant"></c:url> ">Takeout</a></dd>
@@ -104,8 +106,7 @@
 <div class="booking-info">
   <h3>个人信息</h3>
 </div>
-${givenMessage}
-<form method="post" action="#">
+<form method="post" action="/camplus/user/editInfo" id="selfInfoChangeForm">
 <div class="online_reservation" style="margin-bottom: 30px">
   <div class="b_room">
     <div class="booking_room">
@@ -114,35 +115,35 @@ ${givenMessage}
           <li class="span1_of_1" style="margin-left: 30px">
             <h4 style="font-weight: lighter">学号</h4>
             <div class="book_date"style="border: thin solid #c5c5c5;border-radius: 3px">
-              <input type="text" name="uid" value="${studentnum}" contenteditable="false">
+              <input type="text"  name="uid"  id="uid" value="${studentnum}" contenteditable="false">
             </div>
           </li>
           <div class="clearfix"></div>
           <li class="span1_of_1" style="margin-left: 30px">
             <h4 style="font-weight: lighter">用户名</h4>
             <div class="book_date"style="border: thin solid #c5c5c5;border-radius: 3px">
-              <input type="text" name="uname" value="" >
+              <input type="text" class="uname" name="uname" id="uname" value="" >
             </div>
           </li>
           <div class="clearfix"></div>
           <li class="span1_of_1" style="margin-left: 30px">
             <h4 style="font-weight: lighter">密码</h4>
             <div class="book_date"style="width:300px;border: thin solid #c5c5c5;border-radius: 3px">
-              <input type="password" name="password" value="" >
+              <input type="password" class="password" name="password" id="password" value="" >
             </div>
           </li>
           <div class="clearfix"></div>
           <li class="span1_of_1" style="margin-left: 30px">
             <h4 style="font-weight: lighter">重输密码</h4>
             <div class="book_date"style="width:300px;border: thin solid #c5c5c5;border-radius: 3px">
-              <input type="password" value="" name="repassword">
+              <input type="password" value="" class="repassword" name="repassword" id="repassword">
             </div>
           </li>
           <div class="clearfix"></div>
           <li class="span1_of_1" style="margin-left: 30px">
             <h4 style="font-weight: lighter">联系方式</h4>
             <div class="book_date"style="width:300px;border: thin solid #c5c5c5;border-radius: 3px">
-              <input type="text" value="" name="contact">
+              <input type="text" value="" id="contact" name="contact" id="contact">
             </div>
           </li>
           <div class="clearfix"></div>

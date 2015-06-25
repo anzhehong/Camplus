@@ -103,9 +103,7 @@
           <li><a href="/camplus/jsp/index.jsp">Home</a></li>
 
           <li><a href="<c:url value="/carpool/select"></c:url> ">Carpool</a></li>
-          <!-- <li><a href="booking.html">EXCHANGE</a></li>  -->
           <li><a href="/camplus/jsp/CourseDiscussion/courseSearch.jsp">Course</a> </li>
-          <li><a href="/camplus/jsp/index.jsp">Exchange</a></li>
           <li onmouseover="showsubmenu(this)" onmouseout="hidesubmenu(this)"><a>Gallery</a>
             <ul class="submenu">
               <dd><a href="<c:url value="/gallery"></c:url> ">Album</a></dd>
@@ -113,7 +111,7 @@
               <dd><a href="<c:url value="/gallery/mySpace"></c:url> ">MySpace</a></dd>
             </ul>
           </li>
-          <li onmouseover="showsubmenu(this)" onmouseout="hidesubmenu(this)" style="color: whitesmoke">Information</a>
+          <li onmouseover="showsubmenu(this)" onmouseout="hidesubmenu(this)"><a>Information</a>
             <ul class="subMenu">
               <dd><a href="<c:url value="/information/locationHome"></c:url> ">Map</a></dd>
               <dd><a href="<c:url value="/restaurant"></c:url> ">Takeout</a></dd>
@@ -314,7 +312,7 @@
       <input type="submit" name="indexmove" value="prev"/>
     </form>
     <form action="/camplus/carpool/select" method="get">
-      <input type="text" name="indexmove" value="${sessionScope.index+1}"/>
+      <input type="text" name="indexmove" value="${totalpage}"/>
       <input type="submit" value="Go"/>
     </form>
     <form action="/camplus/carpool/select" method="get">
